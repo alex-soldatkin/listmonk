@@ -21,7 +21,7 @@ x-db-defaults: &db-defaults
   networks:
     - listmonk
   environment:
-    - POSTGRES_PASSWORD=1GALwj3EyXC5z
+    - POSTGRES_PASSWORD=listmonk
     - POSTGRES_USER=listmonk
     - POSTGRES_DB=listmonk
   restart: unless-stopped
@@ -48,19 +48,20 @@ services:
     volumes:
       - ./config.toml:/listmonk/config.toml
 
-  # demo-db:
-  #   container_name: listmonk_demo_db
-  #   <<: *db-defaults
+  demo-db:
+    container_name: listmonk_demo_db
+    <<: *db-defaults
 
-  # demo-app:
-  #   <<: *app-defaults
-  #   container_name: listmonk_demo_app
-  #   command: [sh, -c, "yes | ./listmonk --install --config config-demo.toml && ./listmonk --config config-demo.toml"]
-  #   depends_on:
-  #     - demo-db
+  demo-app:
+    <<: *app-defaults
+    container_name: listmonk_demo_app
+    command: [sh, -c, "yes | ./listmonk --install --config config-demo.toml && ./listmonk --config config-demo.toml"]
+    depends_on:
+      - demo-db
 
 networks:
   listmonk:
 
 volumes:
   listmonk-data:
+    external: true
